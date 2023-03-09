@@ -68,16 +68,17 @@ class SingleCellGGM:
             pc = np.eye(selected_num) * 2 + pc
 
             @jit
-            def loopjit(j, selected_num, pcor_sampling_num, pc, pcor_all):
-                for m in range(0, selected_num):
-                    for n in range(0, selected_num):
-                        r = j[m]
-                        s = j[n]
+            def loopjit(j_in, selected_num_in, pcor_sampling_num_in, pc_in, pcor_all_in):
+                for m in range(0, selected_num_in):
+                    for n in range(0, selected_num_in):
+                        r = j_in[m]
+                        s = j_in[n]
                         if r > s:
-                            pcor_sampling_num[r, s] = pcor_sampling_num[r, s] + 1
-                            if abs(pc[m, n]) < abs(pcor_all[r, s]):
-                                pcor_all[r, s] = pc[m, n]
+                            pcor_sampling_num_in[r, s] = pcor_sampling_num_in[r, s] + 1
+                            if abs(pc_in[m, n]) < abs(pcor_all_in[r, s]):
+                                pcor_all_in[r, s] = pc_in[m, n]
             loopjit(j, selected_num, pcor_sampling_num, pc, pcor_all)
+
             loop_time = time.time() - loop_start_t
             idx_time = np.mod(i, 100) - 1
             time_trend[idx_time] = loop_time
