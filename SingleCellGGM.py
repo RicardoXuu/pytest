@@ -3,7 +3,6 @@ class SingleCellGGM:
     samples_num = []
     gene_num = []
     gene_name = []
-    expressed_cell_num = []
     coexpressed_cell_num = []
     pcor_all = []
     pcor_sampling_num = []
@@ -97,8 +96,6 @@ class SingleCellGGM:
         self.samples_num = nrow
         self.gene_num = ncol
         self.gene_name = gene_id
-        self.expressed_cell_num = {'Gene': list(gene_id), 'Cell_num': list(cellnum.astype(int))}
-        self.expressed_cell_num = pd.DataFrame(self.expressed_cell_num)
         self.coexpressed_cell_num = coex.astype(int)
         pcor_all[pcor_sampling_num == 0] = 0
         self.pcor_all = pcor_all.astype(float)
@@ -133,7 +130,7 @@ class SingleCellGGM:
 
         cut_off_pcor = pcor_threshold
         cut_off_coex_cell = coex_cell_threshold
-        cellnum = np.array(self.expressed_cell_num["Cell_num"])
+        cellnum = np.diagonal(self.coexpressed_cell_num)
 
         idx = np.where((self.pcor_all >= cut_off_pcor)
                        & (self.pcor_all < 1)
